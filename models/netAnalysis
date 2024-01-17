@@ -1,0 +1,13 @@
+const mongoose = require("mongoose");
+const userSchema = new mongoose.Schema({
+  pregunta1: {
+    type: String,
+    required: [true, "responder es obligatorio"],
+  },
+  pregunta2: {
+    type: String,
+    required: [true, "responder es obligatorio"],
+  },
+});
+
+module.exports = mongoose.model("netAnalysis", userSchema);
