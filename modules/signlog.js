@@ -1,5 +1,6 @@
 const User = require("../models/users");
 const bcrypt = require("bcrypt"); // permite encriptar un String
+const { config } = require("dotenv");
 const jwt = require("jsonwebtoken"); // genera un token para los String encriptados
 const jwkey = "qpdksmeuthal"; //
 const nodemailer = require("nodemailer"); // función para recuperar contraseña
@@ -70,47 +71,52 @@ const login = async (req, res) => {
 };
 
 // variable pare recuperar contraseña --->>> ** incompleta **
-const recoverPassword = async (req, res) => {
+const sendToYourMail = async (req, res) => {
+  let receivedMail = req.body.mail;
   const transporter = nodemailer.createTransport({
-    host: "smtp.forwardemail.net",
-    port: 465,
-    secure: true,
     service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // en true usar 465, en false usar otros ports
     auth: {
-      user: "backendWaru@gmail.com",
-      pass: "backendw",
+      user: "backendwaru@gmail.com", // correo por creado para pruebas del sistema waru
+      pass: "hbol dcpy pxdj jtja", // nombre de contraseña de aplicación: adminAPI
     },
   });
-  const randomNum = Math.floor(Math.random() * 9000) + 1000;
-  const userMail = req.body.mail;
-  const resetToken = randomNum;
-
+  verificationLink = `http://localhost:3001/api/updatePassword`;
   const mailOptions = {
-    from: userMail,
-    to: userMail,
+    from: {
+      name: "WaruSupport",
+      address: "backendwaru@gmail.com",
+    },
+    to: receivedMail,
     subject: "Restablecer contraseña",
-    text: `Haz clic en el siguiente enlace para restablecer tu contraseña: http://waru.com/reset-password?token=${resetToken}`,
+    html: `<b>Please click on the following link or paste this into your browser to complete the process: </b><a href="${verificationLink}">Cambio de contraseña</a>`,
   };
 
-  const info = await transporter.sendMail(mailOptions, (error, info) => {
+  const sendMail = async (transporter, mailOptions) => {
     try {
-      if (error) {
-        console.error(error);
-        res.status(500).json({
-          msg: "Error al enviar el correo electrónico.",
-          success: false,
-        });
-      } else {
-        console.log("Correo electronico enviado" + info.response);
-        res.status(200).send("Correo electrónico enviado con exito.");
-      }
+      await transporter.sendMail(mailOptions);
+      console.log("El correo ha sido enviado");
     } catch (error) {
-      console.log("algo salio mal");
+      console.log(error);
     }
-  });
+  };
+  sendMail(transporter, mailOptions);
 };
+
+// función en desarrollo
+const changePassword = async (req, res) => {
+  const receivedMail = req.body.mail;
+  const foundUser = await User.findOne({ mail });
+  try {
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   signin: signin,
   login: login,
-  recoverPassword: recoverPassword,
+  sendToYourMail: sendToYourMail,
 };

@@ -41,8 +41,8 @@ app.post("/api/login", function (req, res) {
   signLog.login(req, res);
 });
 
-app.post("/api/recoverPassword", function (req, res) {
-  signLog.recoverPassword(req, res);
+app.post("/api/sendmail", function (req, res) {
+  signLog.sendToYourMail(req, res);
 });
 
 app.post("/api/test", function (req, res) {
