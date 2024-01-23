@@ -83,7 +83,13 @@ const sendToYourMail = async (req, res) => {
       pass: "hbol dcpy pxdj jtja", // nombre de contraseña de aplicación: adminAPI
     },
   });
-  verificationLink = `http://localhost:3001/api/updatePassword`;
+  const foundUser = await User.findOne({ mail: receivedMail });
+  const payload = {
+    id: foundUser._id,
+    username: foundUser.username,
+  };
+  const token = jwt.sign(payload, jwkey, { expiresIn: 60 });
+  verificationLink = `http://localhost:3001/api/updatePassword${token}`;
   const mailOptions = {
     from: {
       name: "WaruSupport",
