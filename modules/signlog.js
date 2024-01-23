@@ -83,6 +83,7 @@ const sendToYourMail = async (req, res) => {
       pass: "hbol dcpy pxdj jtja", // nombre de contraseña de aplicación: adminAPI
     },
   });
+  // colocación de token en correo electronico
   const foundUser = await User.findOne({ mail: receivedMail });
   const payload = {
     id: foundUser._id,
