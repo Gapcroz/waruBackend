@@ -71,7 +71,7 @@ const login = async (req, res) => {
 };
 
 // variable pare recuperar contraseña --->>> ** incompleta **
-const sendToYourMail = async (req, res) => {
+const sendMail = async (req, res) => {
   let receivedMail = req.body.mail;
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -90,7 +90,7 @@ const sendToYourMail = async (req, res) => {
     username: foundUser.username,
   };
   const token = jwt.sign(payload, jwkey, { expiresIn: 60 });
-  verificationLink = `http://localhost:3001/api/updatePassword${token}`;
+  verificationLink = `http://localhost:3000/cambioContrasena${token}`;
   const mailOptions = {
     from: {
       name: "WaruSupport",
@@ -109,7 +109,13 @@ const sendToYourMail = async (req, res) => {
       console.log(error);
     }
   };
+
   sendMail(transporter, mailOptions);
+  return res.status(202).json({
+    msg: "correo enviado",
+    token: token,
+    success: true,
+  });
 };
 
 // función en desarrollo
@@ -125,5 +131,5 @@ const changePassword = async (req, res) => {
 module.exports = {
   signin: signin,
   login: login,
-  sendToYourMail: sendToYourMail,
+  sendMail: sendMail,
 };

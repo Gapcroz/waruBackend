@@ -42,7 +42,7 @@ app.post("/api/login", function (req, res) {
 });
 
 app.post("/api/sendmail", function (req, res) {
-  signLog.sendToYourMail(req, res);
+  signLog.sendMail(req, res);
 });
 
 app.post("/api/test", function (req, res) {
