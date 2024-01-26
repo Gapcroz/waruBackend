@@ -70,7 +70,7 @@ const login = async (req, res) => {
   }
 };
 
-// variable pare recuperar contraseña --->>> ** incompleta **
+// variable pare enviar link de verificación para recuperar contraseña
 const sendLink = async (req, res) => {
   let receivedMail = req.body.mail;
   const transporter = nodemailer.createTransport({
@@ -114,15 +114,6 @@ const sendLink = async (req, res) => {
 
   sendMail(transporter, mailOptions);
 
-  // ejercicio de prueba para guardar un nuevo modelo de token para salvar contraseñas
-  // const newToken = new tokenRecovery({
-  //   token: token,
-  //   username: foundUser.username,
-  //   mail: foundUser.mail,
-  // });
-
-  // const createdToken = await newToken.save();
-  // --------------------------------------------------------------------------------
   return res.status(202).json({
     msg: "correo enviado",
     token: token,
@@ -130,7 +121,7 @@ const sendLink = async (req, res) => {
   });
 };
 
-// función en desarrollo
+// función para cambiar contraseña
 const changePassword = async (req, res) => {
   try {
     const username = req.body.username;
