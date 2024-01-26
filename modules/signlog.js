@@ -1,9 +1,9 @@
 const User = require("../models/users");
 const bcrypt = require("bcrypt"); // permite encriptar un String
-const { config } = require("dotenv");
 const jwt = require("jsonwebtoken"); // genera un token para los String encriptados
 const jwkey = "qpdksmeuthal"; //
 const nodemailer = require("nodemailer"); // función para recuperar contraseña
+// const tokenRecovery = require("../models/tokenRecovery");
 
 // variable para iniciar registro en pagina web
 const signin = async (req, res) => {
@@ -71,7 +71,7 @@ const login = async (req, res) => {
 };
 
 // variable pare recuperar contraseña --->>> ** incompleta **
-const sendMail = async (req, res) => {
+const sendLink = async (req, res) => {
   let receivedMail = req.body.mail;
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -89,8 +89,10 @@ const sendMail = async (req, res) => {
     id: foundUser._id,
     username: foundUser.username,
   };
-  const token = jwt.sign(payload, jwkey, { expiresIn: 60 });
-  verificationLink = `http://localhost:3000/cambioContrasena${token}`;
+
+  const token = jwt.sign(payload, jwkey, { expiresIn: "15min" });
+
+  const verificationLink = `http://localhost:3000/cambioContrasena?token=${token}`;
   const mailOptions = {
     from: {
       name: "WaruSupport",
@@ -111,6 +113,16 @@ const sendMail = async (req, res) => {
   };
 
   sendMail(transporter, mailOptions);
+
+  // ejercicio de prueba para guardar un nuevo modelo de token para salvar contraseñas
+  // const newToken = new tokenRecovery({
+  //   token: token,
+  //   username: foundUser.username,
+  //   mail: foundUser.mail,
+  // });
+
+  // const createdToken = await newToken.save();
+  // --------------------------------------------------------------------------------
   return res.status(202).json({
     msg: "correo enviado",
     token: token,
@@ -120,9 +132,23 @@ const sendMail = async (req, res) => {
 
 // función en desarrollo
 const changePassword = async (req, res) => {
-  const receivedMail = req.body.mail;
-  const foundUser = await User.findOne({ mail });
   try {
+    const username = req.body.username;
+    const password = req.body.password;
+    const encryptionPassword = await bcrypt.hash(password, 10);
+    return User.updateOne(
+      { username: username },
+      {
+        $set: {
+          password: encryptionPassword,
+        },
+      }
+    ).then((resultado) => {
+      res.status(200).json({
+        msg: "Contraseña actualizada en base de datos",
+        success: true,
+      });
+    });
   } catch (error) {
     console.log(error);
   }
@@ -131,5 +157,6 @@ const changePassword = async (req, res) => {
 module.exports = {
   signin: signin,
   login: login,
-  sendMail: sendMail,
+  sendLink: sendLink,
+  changePassword: changePassword,
 };

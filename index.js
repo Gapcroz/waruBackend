@@ -41,8 +41,12 @@ app.post("/api/login", function (req, res) {
   signLog.login(req, res);
 });
 
-app.post("/api/sendmail", function (req, res) {
-  signLog.sendMail(req, res);
+app.post("/api/sendLink", function (req, res) {
+  signLog.sendLink(req, res);
+});
+
+app.patch("/api/changePassword", function (req, res) {
+  signLog.changePassword(req, res);
 });
 
 app.post("/api/test", function (req, res) {
