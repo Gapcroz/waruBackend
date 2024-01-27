@@ -19,6 +19,16 @@ const completeTest = async (req, res) => {
   }
 };
 
+const autoDiagnostico = async (req, res) => {
+  try {
+    const answers = await NetAnalysis.find();
+    res.send(answers);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   completeTest: completeTest,
+  autoDiagnostico: autoDiagnostico,
 };

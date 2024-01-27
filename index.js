@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 const db = require("./db");
 const signLog = require("./modules/signlog");
 const test = require("./modules/test");
-const netAnalysis = require("./models/netAnalysis");
 
 const app = express();
 
@@ -53,13 +52,8 @@ app.post("/api/test", function (req, res) {
   test.completeTest(req, res);
 });
 
-app.get("/api/answers", async (req, res) => {
-  try {
-    const answers = await netAnalysis.find();
-    res.send(answers);
-  } catch (error) {
-    console.log(error);
-  }
+app.get("/api/answers", function (req, res) {
+  test.autoDiagnostico(req, res);
 });
 
 // CRUD

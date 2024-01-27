@@ -1,12 +1,52 @@
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
+  // AUTODIAGNOSTICO DE MI NEGOCIO
+  // información general
+  // nombre completo
   pregunta1: {
     type: String,
     required: [true, "responder es obligatorio"],
   },
+  // telefono
   pregunta2: {
     type: String,
     required: [true, "responder es obligatorio"],
+  },
+  // nombre negocio
+  pregunta3: {
+    type: String,
+    required: [true, "responder es obligatorio"],
+  },
+  // MARCA COMERCIAL
+  //nombre negocio
+  pregunta4: {
+    type: String,
+    required: [true, "responder es obligatorio"],
+    default: ["1", "2", "3", "4", "5"],
+  },
+  // logotipo
+  pregunta5: {
+    type: String,
+    required: [true, "responder es obligatorio"],
+    default: ["1", "2", "3", "4", "5"],
+  },
+  // slogan
+  pregunta6: {
+    type: String,
+    required: [true, "responder es obligatorio"],
+    default: ["1", "2", "3", "4", "5"],
+  },
+  // calidad de servicio
+  pregunta7: {
+    type: String,
+    required: [true, "responder es obligatorio"],
+    default: ["1", "2", "3", "4", "5"],
+  },
+  //
+  pregunta6: {
+    type: String,
+    required: [true, "responder es obligatorio"],
+    default: ["1", "2", "3", "4", "5"],
   },
 });
 
