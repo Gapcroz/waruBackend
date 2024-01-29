@@ -151,3 +151,4 @@ module.exports = {
   sendLink: sendLink,
   changePassword: changePassword,
 };
+
