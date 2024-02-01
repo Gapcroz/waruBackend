@@ -6,20 +6,20 @@ const completeTest = async (req, res) => {
     const netAnalysis = new NetAnalysis({ pregunta1, pregunta2 });
     const createdAnswers = await netAnalysis.save();
     return res.status(200).json({
-      msg: "Datos almacenados en MongoDB",
+      msg: "data stored in MongoDB",
       answer: createdAnswers._id,
       success: true,
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      msg: "Error al almacenar datos",
+      msg: "Error storing data",
       success: false,
     });
   }
 };
 
-const autoDiagnostico = async (req, res) => {
+const autoDiagnostic = async (req, res) => {
   try {
     const answers = await NetAnalysis.find();
     res.send(answers);
@@ -30,5 +30,5 @@ const autoDiagnostico = async (req, res) => {
 
 module.exports = {
   completeTest: completeTest,
-  autoDiagnostico: autoDiagnostico,
+  autoDiagnostic: autoDiagnostic,
 };

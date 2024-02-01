@@ -53,7 +53,7 @@ app.post("/api/test", function (req, res) {
 });
 
 app.get("/api/answers", function (req, res) {
-  test.autoDiagnostico(req, res);
+  test.autoDiagnostic(req, res);
 });
 
 // CRUD

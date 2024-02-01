@@ -12,7 +12,7 @@ const signin = async (req, res) => {
     const mailExist = await User.exists({ mail: mail });
     if (mailExist) {
       return res.status(400).json({
-        msg: "El usuario ya existe",
+        msg: "user already exists",
       });
     } else {
       const encryptionPassword = await bcrypt.hash(password, 10);
@@ -23,7 +23,7 @@ const signin = async (req, res) => {
       });
       const createdUser = await newUser.save();
       return res.status(201).json({
-        msg: "Nuevo usuario creado",
+        msg: "new user created",
         user: createdUser._id,
         success: true,
       });
@@ -41,7 +41,7 @@ const login = async (req, res) => {
     const foundUser = await User.findOne({ mail: receivedMail });
     if (!foundUser) {
       return res.status(400).json({
-        msg: "Usuario no encontrado",
+        msg: "user not found",
       });
     } else {
       const matchUser = await bcrypt.compare(
@@ -50,7 +50,7 @@ const login = async (req, res) => {
       );
       if (!matchUser) {
         return res.status(401).json({
-          msg: "Usuario no coincide",
+          msg: "user does not match",
         });
       } else {
         const payload = {
@@ -59,7 +59,7 @@ const login = async (req, res) => {
         };
         const token = jwt.sign(payload, jwkey, { expiresIn: 60 });
         return res.status(200).json({
-          msg: "logIn exitoso",
+          msg: "welcome",
           token: token,
           success: true,
         });
@@ -83,6 +83,7 @@ const sendLink = async (req, res) => {
       pass: "hbol dcpy pxdj jtja", // nombre de contraseña de aplicación: adminAPI
     },
   });
+  
   // colocación de token en correo electronico
   const foundUser = await User.findOne({ mail: receivedMail });
   const payload = {
@@ -92,21 +93,21 @@ const sendLink = async (req, res) => {
 
   const token = jwt.sign(payload, jwkey, { expiresIn: "15min" });
 
-  const verificationLink = `http://localhost:3000/cambioContrasena?token=${token}`;
+  const verificationLink = `http://localhost:3000/newPassword?token=${token}`;
   const mailOptions = {
     from: {
       name: "WaruSupport",
       address: "backendwaru@gmail.com",
     },
     to: receivedMail,
-    subject: "Restablecer contraseña",
+    subject: "restore password",
     html: `<b>Please click on the following link or paste this into your browser to complete the process: </b><a href="${verificationLink}">Cambio de contraseña</a>`,
   };
 
   const sendMail = async (transporter, mailOptions) => {
     try {
       await transporter.sendMail(mailOptions);
-      console.log("El correo ha sido enviado");
+      console.log("mail sent");
     } catch (error) {
       console.log(error);
     }
@@ -115,7 +116,7 @@ const sendLink = async (req, res) => {
   sendMail(transporter, mailOptions);
 
   return res.status(202).json({
-    msg: "correo enviado",
+    msg: "mail sent",
     token: token,
     success: true,
   });
@@ -136,7 +137,7 @@ const changePassword = async (req, res) => {
       }
     ).then((resultado) => {
       res.status(200).json({
-        msg: "Contraseña actualizada en base de datos",
+        msg: "password successfully changed in database",
         success: true,
       });
     });
@@ -151,4 +152,3 @@ module.exports = {
   sendLink: sendLink,
   changePassword: changePassword,
 };
-
