@@ -1,6 +1,6 @@
 # waruBackend
 
-proyecto de bootcamp para el desarrollo de backEnd de la app web
+proyecto desarrollo de backEnd de la app web
 
 Instalar usando (npm install) las siguientes dependencias:
 "dependencies": {
